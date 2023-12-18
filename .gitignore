@@ -1,6 +1,8 @@
 __pycache__
 .vscode
-data.json
 Include
 Lib
 Scripts
+
+data.json
+test.py
