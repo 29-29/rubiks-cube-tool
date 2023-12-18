@@ -109,7 +109,13 @@ def get_oll() -> Oll:
 def str_to_oll(s:str) -> Oll:
 	values = s.split()
 	for i in range(len(values)):
-		values[i] = [True if j == SHADE_CHAR else False if j == NO_SHADE_CHAR else None for j in values[i]]
+		temp = []
+		for j in range(3):
+			if j < len(values[i]):
+				temp.append(True if values[i][j] == SHADE_CHAR else False if values[i][j] == NO_SHADE_CHAR else None)
+			elif j >= len(values[i]):
+				temp.append(temp[-1])
+		values[i] = temp
 	o = Oll()
 	o.values = values
 	return o
