@@ -1,4 +1,3 @@
-#!/python
 # This project aims to record the statistic of how likely a case in PLL or OLL appears in my practice solves
 # by inputting a case I encounter while I solve
 
