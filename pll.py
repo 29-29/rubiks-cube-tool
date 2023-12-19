@@ -92,7 +92,6 @@ with open("pll.txt", "r") as f:
 	cases = f.read().splitlines()
 	PLL_CASES = [str_to_pll(c) for c in cases]
 
-# TODO json file integration
 PRE_STATS = {
 	"PLL": {
 		"count": 0,
@@ -128,7 +127,6 @@ def add_stat(s:str, name:str) -> None:
 	PLL_STATS["encounters"].append(PllStat(s,name).__dict__)
 	stat_save_json()
 
-# TODO PllStat class
 class PllStat:
 	def __init__(self, s:str="", name:str="") -> None:
 		self.reps:int = 1

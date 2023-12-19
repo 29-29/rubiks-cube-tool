@@ -181,7 +181,7 @@ def main():
 	s:str = ""
 	while (True):
 		s = input("RUBIKS/OLL> ")
-		if s in ["q","Q"]:
+		if s.lower() == 'q':
 			return
 		o:Oll = str_to_oll(s)
 		for i, case in enumerate(OLL_CASES):
