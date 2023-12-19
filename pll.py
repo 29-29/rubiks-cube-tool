@@ -1,5 +1,6 @@
 from enum import Enum
 import json
+import sys
 
 COLORS = {
 	"GREEN": 1,
@@ -34,24 +35,30 @@ class Pll:
 			s += " "
 		return s
 	
+	# FIXME rework equality checking
 	def __eq__(self, o:object) -> bool:
 		values_copy = self.values
 		for j in range(4):
 			for i in range(4):
+				# print(' '.join([''.join([str(r) for r in c]) for c in values_copy]), o.to_str, sep=' | ')
 				if values_copy == o.values:
 					return True
-				values_copy = Pll.rotate(values_copy)
-			values_copy = Pll.next_color(values_copy)
+				# print('next color')
+				values_copy = Pll.next_color(values_copy)
+			# print('rotate')
+			values_copy = Pll.rotate(values_copy.copy())
 		return False
 
 	@staticmethod
 	def next_color(values:list) -> list:
-		return [[v%4+1 for v in i] for i in values]
+		new_values = [[v%4+1 for v in i] for i in values]
+		return new_values
 	
 	@staticmethod
 	def rotate(values:list) -> list:
-		values.insert(0, values.pop())
-		return values
+		new_values = values.copy()
+		new_values.insert(0, new_values.pop())
+		return new_values
 
 
 def get_pll() -> Pll:
@@ -135,23 +142,25 @@ class PllStat:
 
 # MAIN ###################################################
 
-def main(args=""):
-	s:str
-	while True:
-		s = input("RUBIKS/PLL> ")
-		if s.lower() == 'q':
-			return
-		p:Pll = str_to_pll
-
-if __name__ == "__main__":
-	s:str
-	while True:
-		s = input("RUBIKS/PLL> ")
-		if s.lower() == "q":
-			quit()
+def main(args=[]):
+	if len(args) == 0:
+		s:str
+		while True:
+			s = input("RUBIKS/PLL> ")
+			if s.lower() == 'q':
+				return
+			p:Pll = str_to_pll(s)
+			for case in PLL_CASES:
+				if p == case:
+					print('found match')
+					add_stat(case.to_str, case.name)
+	elif len(args) == 4:
+		s:str = " ".join(args)
 		p:Pll = str_to_pll(s)
-		# print(p)
 		for case in PLL_CASES:
-			# print(case)
 			if p == case:
 				add_stat(case.to_str, case.name)
+
+if __name__ == "__main__":
+	ARGS = sys.argv[1:]
+	main(ARGS)
