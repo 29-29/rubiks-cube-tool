@@ -127,35 +127,52 @@ with open("oll.txt", "r") as f:
 
 # STATS VARIABLES
 
-YOUR_STATS:dict = {
-	"OLL": [
-	]
+# YOUR_STATS:dict = {
+# 	"OLL": [
+# 	]
+# }
+PRE_STATS = {
+	"PLL": {
+		"count": 0,
+		"encounters": [],
+	},
+	"OLL": {
+		"count": 0,
+		"encounters": [],
+	}
 }
+OLL_STATS = PRE_STATS["OLL"]
 
 class OllStat:
 	def __init__(self, s:str) -> None:
 		self.reps:int = 1
 		self.str:str = s
 
+# READING DATA.JSON
 with open("data.json", "r") as f:
 	s = f.read()
 	if s:
-		YOUR_STATS = json.loads(s)
+		PRE_STATS = json.loads(s)
+		OLL_STATS = PRE_STATS["OLL"]
 
 def stat_save_json():
 	with open("data.json", "w") as f:
 		# s = json.dumps(YOUR_STATS, indent=2)
-		json.dump(YOUR_STATS, f, indent=2)
+		# json.dump(YOUR_STATS, f, indent=2)
 		# f.write(s)
+		POST_STATS = PRE_STATS
+		POST_STATS["OLL"] = OLL_STATS
+		json.dump(POST_STATS, f, indent=2)
 
 def add_stat(s:str) -> None:
-	for i in range(len(YOUR_STATS["OLL"])):
-		case = YOUR_STATS["OLL"][i]
+	OLL_STATS["count"] += 1
+	for i in range(len(OLL_STATS["encounters"])):
+		case = OLL_STATS["encounters"][i]
 		if case["str"] == s:
-			YOUR_STATS["OLL"][i]["reps"] += 1
+			OLL_STATS["encounters"][i]["reps"] += 1
 			stat_save_json()
 			return
-	YOUR_STATS["OLL"].append(OllStat(s).__dict__)
+	OLL_STATS["encounters"].append(OllStat(s).__dict__)
 	stat_save_json()
 
 # MAIN ##############################################################################
