@@ -36,15 +36,22 @@ class Pll:
 	
 	def __eq__(self, o:object) -> bool:
 		values_copy = self.values
-		for i in range(4):
-			if values_copy == o.values:
-				return True
+		for j in range(4):
+			for i in range(4):
+				if values_copy == o.values:
+					return True
+				values_copy = Pll.rotate(values_copy)
 			values_copy = Pll.next_color(values_copy)
 		return False
 
 	@staticmethod
 	def next_color(values:list) -> list:
 		return [[v%4+1 for v in i] for i in values]
+	
+	@staticmethod
+	def rotate(values:list) -> list:
+		values.insert(0, values.pop())
+		return values
 
 
 def get_pll() -> Pll:
@@ -128,3 +135,25 @@ class PllStat:
 		self.case:str = s
 		self.name:str = name
 
+# MAIN ###################################################
+
+def main(args=""):
+	s:str
+	while True:
+		s = input("RUBIKS/PLL> ")
+		if s.lower() == 'q':
+			return
+		p:Pll = str_to_pll
+
+if __name__ == "__main__":
+	s:str
+	while True:
+		s = input("RUBIKS/PLL> ")
+		if s.lower() == "q":
+			quit()
+		p:Pll = str_to_pll(s)
+		# print(p)
+		for case in PLL_CASES:
+			# print(case)
+			if p == case:
+				add_stat(case.to_str, case.name)
