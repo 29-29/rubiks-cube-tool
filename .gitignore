@@ -6,3 +6,5 @@ Scripts
 
 data.json
 test.py
+.diff
+commit.py
