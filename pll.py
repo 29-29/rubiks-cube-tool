@@ -1,4 +1,5 @@
 from enum import Enum
+import json
 
 COLORS = {
 	"GREEN": 1,
@@ -33,7 +34,6 @@ class Pll:
 			s += " "
 		return s
 	
-	# TODO test for equality
 	def __eq__(self, o:object) -> bool:
 		values_copy = self.values
 		for i in range(4):
@@ -80,8 +80,51 @@ def list_to_pll(l:list) -> Pll:
 	p.values = l
 	return p
 
-# TODO get PLL cases
 PLL_CASES = []
 with open("pll.txt", "r") as f:
 	cases = f.read().splitlines()
 	PLL_CASES = [str_to_pll(c) for c in cases]
+
+# TODO json file integration
+PRE_STATS = {
+	"PLL": {
+		"count": 0,
+		"encounters": [],
+	},
+	"OLL": {
+		"count": 0,
+		"encounters": []
+	}
+}
+PLL_STATS = PRE_STATS["PLL"]
+
+with open("data.json", "r") as f:
+	s = f.read()
+	if s:
+		PRE_STATS = json.loads(s)
+		PLL_STATS = PRE_STATS["PLL"]
+
+def stat_save_json() -> None:
+	with open("data.json", "w") as f:
+		POST_STATS = PRE_STATS
+		POST_STATS["PLL"] = PLL_STATS
+		json.dump(POST_STATS, f, indent=2)
+
+def add_stat(s:str, name:str) -> None:
+	PLL_STATS["count"] += 1
+	for i in range(len(PLL_STATS["encounters"])):
+		case = PLL_STATS["encounters"][i]
+		if case["case"] == s:
+			PLL_STATS["encounters"][i]["reps"] += 1
+			stat_save_json()
+			return
+	PLL_STATS["encounters"].append(PllStat(s,name).__dict__)
+	stat_save_json()
+
+# TODO PllStat class
+class PllStat:
+	def __init__(self, s:str="", name:str="") -> None:
+		self.reps:int = 1
+		self.case:str = s
+		self.name:str = name
+
